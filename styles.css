@@ -137,6 +137,9 @@ h6 {
 
 /* ===== Buttons ===== */
 .btn {
+    --btn-tilt-x: 0deg;
+    --btn-tilt-y: 0deg;
+    --btn-lift: 0px;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -147,8 +150,11 @@ h6 {
     border-radius: var(--radius-sm);
     border: 2px solid transparent;
     cursor: pointer;
-    transition: all var(--transition-base);
+    transition: transform var(--transition-base), box-shadow var(--transition-base), background var(--transition-base), border-color var(--transition-base), color var(--transition-base);
     letter-spacing: 0.3px;
+    transform: perspective(900px) rotateX(var(--btn-tilt-x)) rotateY(var(--btn-tilt-y)) translateY(var(--btn-lift));
+    transform-style: preserve-3d;
+    will-change: transform;
 }
 
 .btn-primary {
@@ -160,7 +166,7 @@ h6 {
 .btn-primary:hover {
     background: var(--color-accent-light);
     border-color: var(--color-accent-light);
-    transform: translateY(-2px);
+    --btn-lift: -2px;
     box-shadow: var(--shadow-gold);
 }
 
@@ -174,7 +180,7 @@ h6 {
     background: var(--color-white);
     color: var(--color-primary);
     border-color: var(--color-white);
-    transform: translateY(-2px);
+    --btn-lift: -2px;
 }
 
 /* ===== Section Styles ===== */
@@ -572,17 +578,23 @@ h6 {
 }
 
 .stat-card {
+    --tilt-x: 0deg;
+    --tilt-y: 0deg;
+    --lift: 0px;
     background: var(--color-primary);
     padding: var(--space-xl);
     border-radius: var(--radius-lg);
     text-align: center;
     position: relative;
     overflow: hidden;
-    transition: transform var(--transition-base);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+    transform: perspective(1000px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translateY(var(--lift));
+    transform-style: preserve-3d;
+    will-change: transform;
 }
 
 .stat-card:hover {
-    transform: translateY(-5px);
+    --lift: -5px;
 }
 
 .stat-card::before {
@@ -639,15 +651,21 @@ h6 {
 }
 
 .service-card {
+    --tilt-x: 0deg;
+    --tilt-y: 0deg;
+    --lift: 0px;
     background: var(--color-white);
     border-radius: var(--radius-lg);
     overflow: hidden;
-    transition: all var(--transition-base);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
     box-shadow: var(--shadow-sm);
+    transform: perspective(1000px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translateY(var(--lift));
+    transform-style: preserve-3d;
+    will-change: transform;
 }
 
 .service-card:hover {
-    transform: translateY(-8px);
+    --lift: -8px;
     box-shadow: var(--shadow-lg);
 }
 
@@ -737,6 +755,9 @@ h6 {
 }
 
 .process-card {
+    --tilt-x: 0deg;
+    --tilt-y: 0deg;
+    --lift: 0px;
     flex: 1;
     max-width: 320px;
     background: var(--color-dark-card);
@@ -745,12 +766,27 @@ h6 {
     text-align: center;
     position: relative;
     border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: all var(--transition-base);
+    transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
+    transform: perspective(1000px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translateY(var(--lift));
+    transform-style: preserve-3d;
+    will-change: transform;
 }
 
 .process-card:hover {
     border-color: rgba(201, 168, 76, 0.3);
-    transform: translateY(-5px);
+    --lift: -5px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .btn,
+    .service-card,
+    .process-card,
+    .stat-card {
+        transition: none;
+        animation: none;
+        transform: none;
+    }
 }
 
 .process-number {

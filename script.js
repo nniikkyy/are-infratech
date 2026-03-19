@@ -233,4 +233,50 @@ document.addEventListener('DOMContentLoaded', () => {
             hero.style.transform = `scale(${1.05 + window.scrollY * 0.0001}) translateY(${window.scrollY * 0.2}px)`;
         }
     }, { passive: true });
+
+    // ===== Subtle 3D Tilt Effects =====
+    const enable3dEffects = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+        && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (enable3dEffects) {
+        const tiltCards = document.querySelectorAll('.service-card, .process-card, .stat-card');
+        const tiltButtons = document.querySelectorAll('.btn');
+
+        const applyTilt = (element, event, maxX, maxY) => {
+            const rect = element.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            const px = (x / rect.width) * 2 - 1;
+            const py = (y / rect.height) * 2 - 1;
+
+            element.style.setProperty('--tilt-x', `${(-py * maxX).toFixed(2)}deg`);
+            element.style.setProperty('--tilt-y', `${(px * maxY).toFixed(2)}deg`);
+        };
+
+        tiltCards.forEach(card => {
+            card.addEventListener('pointermove', (event) => applyTilt(card, event, 5, 6));
+            card.addEventListener('pointerleave', () => {
+                card.style.setProperty('--tilt-x', '0deg');
+                card.style.setProperty('--tilt-y', '0deg');
+            });
+        });
+
+        tiltButtons.forEach(button => {
+            button.addEventListener('pointermove', (event) => {
+                const rect = button.getBoundingClientRect();
+                const x = event.clientX - rect.left;
+                const y = event.clientY - rect.top;
+                const px = (x / rect.width) * 2 - 1;
+                const py = (y / rect.height) * 2 - 1;
+
+                button.style.setProperty('--btn-tilt-x', `${(-py * 3).toFixed(2)}deg`);
+                button.style.setProperty('--btn-tilt-y', `${(px * 4).toFixed(2)}deg`);
+            });
+
+            button.addEventListener('pointerleave', () => {
+                button.style.setProperty('--btn-tilt-x', '0deg');
+                button.style.setProperty('--btn-tilt-y', '0deg');
+            });
+        });
+    }
 });
